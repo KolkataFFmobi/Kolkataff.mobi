@@ -1,0 +1,81 @@
+# auto-update — polls public result sources, ingests 2-source-confirmed
+# results, rebuilds, commits, and (once SCHEDULE_VERIFIED is flipped) deploys
+# to Cloudflare Pages. Runs in GitHub's cloud, so it works while every human
+# machine is asleep.
+#
+# Required repository secrets (Settings -> Secrets and variables -> Actions):
+#   CLOUDFLARE_API_TOKEN   - Cloudflare token with "Cloudflare Pages: Edit"
+#   CLOUDFLARE_ACCOUNT_ID  - from the Cloudflare dashboard right sidebar
+#   CF_PAGES_PROJECT       - the Pages project name (e.g. kolkataff-mobi)
+#
+# Deploy stays OFF (results still commit) until lib/core.js SCHEDULE_VERIFIED
+# is manually flipped to true — the same guard scripts/deploy.js enforces.
+
+name: auto-update
+
+on:
+  schedule:
+    # Every 15 min through the IST result day (09:45-21:15 IST = 04:15-15:45 UTC).
+    # Bazi slots: 10:03 11:33 13:03 14:33 16:03 17:33 19:03 20:33 IST.
+    - cron: '*/15 4-15 * * *'
+    # 00:05 IST daily freeze pass (18:35 UTC the previous UTC day).
+    - cron: '35 18 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: auto-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # No npm install: the whole project is Node stdlib only, by design.
+      - name: Fetch, confirm, ingest, build
+        run: node scripts/auto-update.js
+
+      - name: Commit data changes
+        id: commit
+        run: |
+          if git diff --quiet data/results.json; then
+            echo "changed=0" >> "$GITHUB_OUTPUT"
+            echo "No data changes this run."
+          else
+            git config user.name "kff-auto-update"
+            git config user.email "bot@kolkataff.mobi"
+            git add data/results.json
+            git commit -m "auto: results update $(date -u +%FT%TZ)"
+            git push
+            echo "changed=1" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Deploy to Cloudflare Pages (guarded)
+        if: steps.commit.outputs.changed == '1'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_PAGES_PROJECT: ${{ secrets.CF_PAGES_PROJECT }}
+        run: |
+          # Same guards as scripts/deploy.js — never weakened here.
+          if [ -f dist/.dummy-data ]; then
+            echo "::error::dist/.dummy-data present — refusing to deploy dummy results"
+            exit 1
+          fi
+          if ! node -e "process.exit(require('./lib/core').SCHEDULE_VERIFIED ? 0 : 1)"; then
+            echo "::warning::SCHEDULE_VERIFIED is false — results committed but deploy SKIPPED. Verify the bazi times against live sources, flip SCHEDULE_VERIFIED in lib/core.js, and auto-deploy unlocks."
+            exit 0
+          fi
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CF_PAGES_PROJECT" ]; then
+            echo "::warning::Cloudflare secrets not configured — deploy skipped."
+            exit 0
+          fi
+          npx --yes wrangler@4 pages deploy dist --project-name "$CF_PAGES_PROJECT"

@@ -1,0 +1,21 @@
+# Cloudflare Pages headers. Applied to every response.
+# CSP is locked down. script-src 'unsafe-inline' permits first-party inline
+# scripts (countdown, GA4 config) ONLY. The ONE external-script exception is
+# Google Analytics (gtag.js) — added 2026-07-19 by deliberate, documented policy
+# exception (see CLAUDE.md "Analytics exception"); scoped to exactly the
+# Google Analytics hosts it needs (script-src for the loader, connect-src/
+# img-src for hit collection — img-src uses the same *.google-analytics.com
+# wildcard as connect-src because gtag falls back to image-tag transport on
+# devices without sendBeacon/fetch, and those hits can go to regional hosts
+# like region1.google-analytics.com). connect-src also allows 'self' (same
+# origin only): inline JS is build-asserted to never fetch, so this opens
+# nothing in practice, but it stops strict-CSP tooling (e.g. Lighthouse's
+# in-page robots.txt fetch) from reporting false failures. When the ad tag is
+# added later, it gets the same narrow treatment for the ad network ONLY —
+# never a blanket relaxation.
+/*
+  Content-Security-Policy: default-src 'none'; script-src 'unsafe-inline' https://www.googletagmanager.com; style-src 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
