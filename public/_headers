@@ -13,9 +13,16 @@
 # in-page robots.txt fetch) from reporting false failures. When the ad tag is
 # added later, it gets the same narrow treatment for the ad network ONLY —
 # never a blanket relaxation.
+#
+# HSTS: max-age 1yr + includeSubDomains (covers www + fatafat, both HTTPS via
+# Cloudflare). Effective only once the zone's "Always Use HTTPS" (http->https)
+# redirect is on — see CLAUDE.md launch config. `preload` is deliberately OMITTED:
+# submitting to the browser preload list is a one-way door (removal takes months),
+# so do it manually only after launch is stable, not while deploys are shaking out.
 /*
   Content-Security-Policy: default-src 'none'; script-src 'unsafe-inline' https://www.googletagmanager.com; style-src 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
