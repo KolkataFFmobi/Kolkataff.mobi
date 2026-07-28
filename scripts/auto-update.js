@@ -168,6 +168,8 @@ async function main() {
   const added = [];
   const held = [];
   const conflicts = [];
+  const acknowledged = [];
+  const ack = Array.isArray(data._acknowledged_conflicts) ? data._acknowledged_conflicts : [];
 
   for (const date of targetDates) {
     const maxBazi = core.bazisForDate(date);
@@ -187,8 +189,24 @@ async function main() {
       if (existing) {
         const disagree = cands.filter((c) => c.patti !== existing.patti);
         if (disagree.length) {
-          conflicts.push(`${date} bazi ${n}: published ${existing.patti}-${existing.single} but ` +
-            disagree.map((d) => `${d.src} shows ${d.patti}`).join(', ') + ' — left unchanged, needs human review');
+          // A source can be persistently wrong about one historical value (see
+          // _acknowledged_conflicts in results.json). Re-raising a settled
+          // dispute on every run would make the job permanently red and bury
+          // real conflicts, so an EXACT match against an acknowledged entry is
+          // reported as ACK and does not fail the run. Any change — a
+          // different disputed value, a different source — is a NEW conflict
+          // and still fails loudly.
+          const ackd = ack.find((a) =>
+            a.date === date && Number(a.bazi) === n && String(a.published) === String(existing.patti) &&
+            disagree.every((d) => String((a.sources || {})[d.src]) === String(d.patti)) &&
+            disagree.length === Object.keys(a.sources || {}).length);
+          const detail = disagree.map((d) => `${d.src} shows ${d.patti}`).join(', ');
+          if (ackd) {
+            acknowledged.push(`${date} bazi ${n}: ${detail} vs published ${existing.patti} — known and settled (${ackd.resolution})`);
+          } else {
+            conflicts.push(`${date} bazi ${n}: published ${existing.patti}-${existing.single} but ` +
+              detail + ' — left unchanged, needs human review');
+          }
         }
         continue;
       }
@@ -246,6 +264,7 @@ async function main() {
   for (const l of added) console.log('  ADDED   ' + l);
   for (const l of frozen) console.log('  FROZE   ' + l);
   for (const l of held) console.log('  HELD    ' + l);
+  for (const l of acknowledged) console.log('  ACK      ' + l);
   for (const l of conflicts) console.log('  CONFLICT ' + l);
 
   const changed = added.length + frozen.length > 0;

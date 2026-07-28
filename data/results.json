@@ -5,6 +5,18 @@
     "generated": "2026-07-16",
     "excluded_gap_ranges": "Days flagged game_off or unconfirmed_gap by the source were excluded, not published as zero/dash rows. The largest excluded range is 2026-04-20 to 2026-05-05 (16 consecutive days, single-source only, NOT independently confirmed) - see project memory / CLAUDE.md for the manual-confirmation flag."
   },
+  "_acknowledged_conflicts": [
+    {
+      "date": "2026-07-18",
+      "bazi": 8,
+      "published": "380",
+      "sources": {
+        "kolkataff.tv": "279"
+      },
+      "resolution": "majority vote 2026-07-21: kolkataresultff.com and a third competitor both showed 380-1; kolkataff.tv alone showed 279-8. Both pass the digit-sum rule, so majority decided. kolkataff.tv has not corrected it since.",
+      "note": "Acknowledged so the bot does not re-raise a settled dispute on every run. If kolkataff.tv changes its value, or another source starts disagreeing, this stops matching and becomes a NEW conflict that fails loudly."
+    }
+  ],
   "days": [
     {
       "date": "2026-01-01",
