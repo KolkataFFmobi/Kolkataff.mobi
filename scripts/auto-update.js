@@ -41,6 +41,37 @@ const TIMEOUT_MS = 25000;
 // Parsers read ONLY explicitly dated blocks (safety rule 1).
 // ---------------------------------------------------------------------------
 
+// Month-name -> YYYY-MM-DD. Accepts "28 July 2026", "28 JULY 2026", "28 Jul 2026".
+const MONTH_NAMES = { jan:'01',feb:'02',mar:'03',apr:'04',may:'05',jun:'06',
+                      jul:'07',aug:'08',sep:'09',oct:'10',nov:'11',dec:'12' };
+function parseTextDate(str) {
+  const m = /(\d{1,2})\s+([A-Za-z]{3,})\s+(\d{4})/.exec(String(str || ''));
+  if (!m) return null;
+  const mo = MONTH_NAMES[m[2].slice(0, 3).toLowerCase()];
+  if (!mo) return null;
+  return `${m[3]}-${mo}-${String(m[1]).padStart(2, '0')}`;
+}
+
+// Pull the patti row and single row out of a table body and pair them by
+// column. Non-numeric cells ("Tips", "-", empty) become null, which is how a
+// not-yet-declared slot is represented.
+function pairRows(body) {
+  const rows = [...body.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/g)]
+    .map((r) => r[1]).filter((r) => /<td/i.test(r));
+  if (!rows.length) return {};
+  const cells = (row) => [...row.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)]
+    .map((c) => c[1].replace(/<[^>]*>/g, '').replace(/&#8211;|&ndash;/g, '').trim());
+  const pattis = cells(rows[0]);
+  const singles = rows[1] ? cells(rows[1]) : [];
+  const day = {};
+  for (let i = 0; i < pattis.length && i < 8; i++) {
+    if (!/^\d{3}$/.test(pattis[i])) continue;
+    const sg = /^\d$/.test(singles[i] || '') ? singles[i] : null;
+    day[i + 1] = { patti: pattis[i], single: sg };
+  }
+  return day;
+}
+
 // kolkataff.tv: per-day tables headed <h3>DD/MM/YYYY</h3>, cells are
 // <h4><strong>PATTI</strong></h4><h4>SINGLE</h4> pairs in bazi order.
 function parseKolkataffTv(html) {
@@ -59,6 +90,16 @@ function parseKolkataffTv(html) {
       day[n] = { patti: c[1], single: c[2] };
     }
     if (n > 0) out[date] = day;
+  }
+  // The live "today" block. It is trusted ONLY because it states its own date
+  // ("(TUESDAY, 28 JULY 2026)") which is verified against the expected day by
+  // the caller — that check is what neutralises this widget's known habit of
+  // rolling to tomorrow before the current day is finished.
+  const live = /\(\s*[A-Za-z]+DAY\s*,\s*([^)]+?)\s*\)[\s\S]*?<tbody id="today-results-body">([\s\S]*?)<\/tbody>/i.exec(html);
+  if (live) {
+    const d = parseTextDate(live[1]);
+    const day = pairRows(live[2]);
+    if (d && Object.keys(day).length) out[d] = Object.assign(out[d] || {}, day);
   }
   return out;
 }
@@ -86,12 +127,36 @@ function parseKolkataResultFf(html) {
     }
     if (n > 0) out[date] = day;
   }
+  // Live section, same principle: it declares its own date in .datelive.
+  const live = /class="datelive[^"]*"[^>]*>\s*([^<]+?)\s*<\/div>[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/i.exec(html);
+  if (live) {
+    const d = parseTextDate(live[1]);
+    const day = pairRows(live[2]);
+    if (d && Object.keys(day).length) out[d] = Object.assign(out[d] || {}, day);
+  }
+  return out;
+}
+
+// kolkataff.in: every result table (today AND history) is headed by
+// <th colspan="8">D Month YYYY</th>, then a patti row and a single row — so one
+// parser covers both, and every block is explicitly dated by construction.
+function parseKolkataffIn(html) {
+  const out = {};
+  const re = /<th[^>]*colspan="8"[^>]*>\s*([^<]+?)\s*<\/th>([\s\S]*?)<\/table>/g;
+  let m;
+  while ((m = re.exec(html))) {
+    const d = parseTextDate(m[1]);
+    if (!d) continue;
+    const day = pairRows(m[2]);
+    if (Object.keys(day).length) out[d] = Object.assign(out[d] || {}, day);
+  }
   return out;
 }
 
 const SOURCES = [
   { name: 'kolkataff.tv', url: 'https://kolkataff.tv/', parse: parseKolkataffTv },
   { name: 'kolkataresultff.com', url: 'https://kolkataresultff.com/', parse: parseKolkataResultFf },
+  { name: 'kolkataff.in', url: 'https://kolkataff.in/', parse: parseKolkataffIn },
 ];
 
 // ---------------------------------------------------------------------------
