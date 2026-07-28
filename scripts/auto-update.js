@@ -344,6 +344,11 @@ async function main() {
         data.days.push(day);
       }
       if (!Array.isArray(day.bazis)) day.bazis = [];
+      // declaredAt is when WE published it, not when the game declared it —
+      // no source exposes the real declaration instant. For a live ingest the
+      // two are within one poll interval; for a backfill it is simply the
+      // catch-up time. `sources` records who reported it, which is what makes
+      // a value provisional (1) or confirmed (2+).
       day.bazis.push({ n, patti, single, declaredAt: core.istIso(now), sources: agreed[1].map((c) => c.src) });
       day.bazis.sort((a, b) => a.n - b.n);
       added.push(`${date} bazi ${n}: ${patti}-${single} (${agreed[1].length === 1 ? 'PROVISIONAL, 1 source: ' + agreed[1][0].src : agreed[1].length + ' sources'})`);
