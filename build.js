@@ -807,11 +807,21 @@ function renderHomepage(ctx) {
 
   // (2) H1 (date from the same `today` var) -> LIVE badge + date -> NEXT strip
   parts.push(`<h1>Kolkata FF &ndash; Kolkata Fatafat Result Today (${esc(longDate(today))})</h1>`);
+  // Refresh control: a results site's most-wanted action is "check again".
+  // location.reload() re-requests the page, which also registers a fresh GA4
+  // page_view on its own — no URL parameter is needed (and a ?refresh variant
+  // would spawn indexable duplicate URLs, which the crawl/duplicate-content
+  // rules exist to prevent). Server-rendered enabled: it is a real reload, so
+  // it works without JS too; the script only upgrades the label to "Refreshing".
   parts.push(
     '<div class="live-row"><span class="live-badge">LIVE</span> ' +
     `<time datetime="${escAttr(today)}">${esc(longDate(today))}</time> ` +
-    `<span class="muted">&middot; updated <time datetime="${escAttr(pm.iso)}">${esc(pm.hhmm)} IST</time></span></div>`
+    `<span class="muted">&middot; updated <time datetime="${escAttr(pm.iso)}">${esc(pm.hhmm)} IST</time></span>` +
+    '<button type="button" id="rf" class="refresh-btn" aria-label="Refresh to load the latest declared results">' +
+    '<span aria-hidden="true">&#8635;</span> Refresh</button></div>'
   );
+  // Compact by necessity: the homepage inline-JS budget is nearly full.
+  parts.push('<script>var _r=document.getElementById("rf");if(_r)_r.onclick=function(){_r.disabled=true;_r.textContent="Refreshing";location.reload()};</script>');
   parts.push(nextResultStrip(ctx));
 
   // (3) Today's result table. Caption keeps the date (four-way-sync invariant:
