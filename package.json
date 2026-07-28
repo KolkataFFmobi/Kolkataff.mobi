@@ -11,7 +11,8 @@
     "deploy": "node scripts/deploy.js",
     "update": "node scripts/update.js",
     "auto-update": "node scripts/auto-update.js",
-    "serve": "node scripts/serve.js"
+    "serve": "node scripts/serve.js",
+    "timing-report": "node scripts/timing-report.js"
   },
   "engines": {
     "node": ">=18"

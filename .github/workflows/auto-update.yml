@@ -28,8 +28,13 @@ name: auto-update
 
 on:
   schedule:
-    # Every 15 min through the IST result day (09:45-21:15 IST = 04:15-15:45 UTC).
-    - cron: '*/15 4-15 * * *'
+    # Every 5 min through the IST result day (09:30-21:29 IST = 04:00-15:59 UTC).
+    # 5 is GitHub's minimum granularity, so this is the tightest polling
+    # available; it cuts worst-case lag from ~12 min to ~5. Every source is
+    # polled on every run — alternating between sources would be WORSE, since
+    # each site would then only be checked every other cycle. Free: public
+    # repositories get unmetered Actions minutes.
+    - cron: '*/5 4-15 * * *'
     # 00:05 IST daily freeze pass (18:35 UTC the previous UTC day).
     - cron: '35 18 * * *'
   workflow_dispatch: {}
