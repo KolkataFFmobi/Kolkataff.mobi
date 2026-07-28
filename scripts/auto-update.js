@@ -33,7 +33,16 @@ const core = require('../lib/core');
 
 const UA =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
-const MIN_SOURCES = 2;
+// Publish as soon as ANY source carries a result (requested 2026-07-28: speed
+// beats waiting for a second source to catch up). Accuracy is protected on the
+// back end instead of the front: a value published from a single source is
+// recorded as provisional, and if 2+ sources later AGREE on a different value,
+// it is auto-corrected (see CORRECTION rule below). A value already confirmed
+// by 2+ sources is still never silently overwritten.
+const MIN_SOURCES = 1;
+// A provisional (single-source) value may be overturned only by at least this
+// many agreeing sources — majority beats a lone source.
+const MIN_TO_CORRECT = 2;
 const TIMEOUT_MS = 25000;
 
 // ---------------------------------------------------------------------------
@@ -223,8 +232,8 @@ async function main() {
       console.error(`  [${s.name}] FAILED: ${err.message}`);
     }
   }
-  if (fetched.length < MIN_SOURCES) {
-    console.error(`x fewer than ${MIN_SOURCES} sources reachable — nothing can be confirmed; aborting without changes`);
+  if (fetched.length < 1) {
+    console.error('x no sources reachable — aborting without changes');
     process.exit(2);
   }
 
@@ -234,6 +243,7 @@ async function main() {
   const held = [];
   const conflicts = [];
   const acknowledged = [];
+  const corrected = [];
   const ack = Array.isArray(data._acknowledged_conflicts) ? data._acknowledged_conflicts : [];
 
   for (const date of targetDates) {
@@ -266,11 +276,33 @@ async function main() {
             disagree.every((d) => String((a.sources || {})[d.src]) === String(d.patti)) &&
             disagree.length === Object.keys(a.sources || {}).length);
           const detail = disagree.map((d) => `${d.src} shows ${d.patti}`).join(', ');
+          // Does a majority now agree on one different value?
+          const alt = {};
+          for (const d of disagree) (alt[d.patti] = alt[d.patti] || []).push(d.src);
+          const winner = Object.entries(alt).find(([, srcs]) => srcs.length >= MIN_TO_CORRECT);
+          const wasProvisional = (existing.sources || []).length < MIN_TO_CORRECT;
+
           if (ackd) {
             acknowledged.push(`${date} bazi ${n}: ${detail} vs published ${existing.patti} — known and settled (${ackd.resolution})`);
+          } else if (winner && wasProvisional) {
+            // Self-correction: the published value came from one source only,
+            // and 2+ sources now agree on something else. Majority wins.
+            const [newPatti, srcs] = winner;
+            const newSingle = core.expectedSingle(newPatti);
+            if (core.validateResult(newPatti, newSingle).ok) {
+              const was = `${existing.patti}-${existing.single}`;
+              existing.patti = newPatti;
+              existing.single = newSingle;
+              existing.sources = srcs.slice();
+              existing.correctedAt = core.istIso(now);
+              corrected.push(`${date} bazi ${n}: ${was} (single source) -> ${newPatti}-${newSingle} (${srcs.length} sources: ${srcs.join(', ')})`);
+            } else {
+              conflicts.push(`${date} bazi ${n}: majority suggests ${newPatti} but it fails digit-sum validation — left unchanged`);
+            }
           } else {
-            conflicts.push(`${date} bazi ${n}: published ${existing.patti}-${existing.single} but ` +
-              detail + ' — left unchanged, needs human review');
+            conflicts.push(`${date} bazi ${n}: published ${existing.patti}-${existing.single}` +
+              (wasProvisional ? ' (single source)' : ` (confirmed by ${(existing.sources || []).length} sources)`) +
+              ' but ' + detail + ' — left unchanged, needs human review');
           }
         }
         continue;
@@ -284,14 +316,16 @@ async function main() {
       // Two-source agreement on the patti (rule 2).
       const byPatti = {};
       for (const c of cands) (byPatti[c.patti] = byPatti[c.patti] || []).push(c);
-      const agreed = Object.entries(byPatti).find(([, list]) => list.length >= MIN_SOURCES);
-      if (!agreed) {
-        if (Object.keys(byPatti).length > 1) {
-          conflicts.push(`${date} bazi ${n}: sources disagree — ` +
-            cands.map((c) => `${c.src}=${c.patti}`).join(', ') + ' — held');
-        } else {
-          held.push(`${date} bazi ${n}: only ${cands.length} source(s) carry it (${cands[0].src}=${cands[0].patti}) — waiting for confirmation`);
-        }
+      // Pick the most-supported value. With MIN_SOURCES=1 a lone source is
+      // enough, but where sources DISAGREE the majority still wins rather than
+      // whichever happened to be fetched first.
+      const ranked = Object.entries(byPatti).sort((a, b) => b[1].length - a[1].length);
+      const agreed = ranked[0] && ranked[0][1].length >= MIN_SOURCES ? ranked[0] : null;
+      if (!agreed) continue;
+      if (ranked.length > 1 && ranked[0][1].length === ranked[1][1].length) {
+        // A genuine tie (e.g. 1 v 1) — publishing either would be a coin flip.
+        conflicts.push(`${date} bazi ${n}: sources tied — ` +
+          cands.map((c) => `${c.src}=${c.patti}`).join(', ') + ' — held, needs human review');
         continue;
       }
       const patti = agreed[0];
@@ -310,9 +344,9 @@ async function main() {
         data.days.push(day);
       }
       if (!Array.isArray(day.bazis)) day.bazis = [];
-      day.bazis.push({ n, patti, single, declaredAt: core.istIso(now) });
+      day.bazis.push({ n, patti, single, declaredAt: core.istIso(now), sources: agreed[1].map((c) => c.src) });
       day.bazis.sort((a, b) => a.n - b.n);
-      added.push(`${date} bazi ${n}: ${patti}-${single} (${agreed[1].length} sources)`);
+      added.push(`${date} bazi ${n}: ${patti}-${single} (${agreed[1].length === 1 ? 'PROVISIONAL, 1 source: ' + agreed[1][0].src : agreed[1].length + ' sources'})`);
     }
   }
 
@@ -329,10 +363,11 @@ async function main() {
   for (const l of added) console.log('  ADDED   ' + l);
   for (const l of frozen) console.log('  FROZE   ' + l);
   for (const l of held) console.log('  HELD    ' + l);
+  for (const l of corrected) console.log('  CORRECTED ' + l);
   for (const l of acknowledged) console.log('  ACK      ' + l);
   for (const l of conflicts) console.log('  CONFLICT ' + l);
 
-  const changed = added.length + frozen.length > 0;
+  const changed = added.length + frozen.length + corrected.length > 0;
   if (dryRun) {
     console.log(`dry run — no changes written (would ${changed ? 'update' : 'do nothing'})`);
   } else if (changed) {
