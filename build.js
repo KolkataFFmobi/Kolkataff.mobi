@@ -1230,16 +1230,16 @@ function archivesDesc(ctx) {
 // NEVER be derived from build time, so a rebuild with no content change
 // produces the exact same lastmod every time (checked post-build).
 const CONTENT_LASTMOD = {
-  '/patti-chart/': '2026-07-19',
-  '/timings/': '2026-07-19',
-  '/how-to-play/': '2026-07-19',
-  '/faq/': '2026-07-19',
-  '/about/': '2026-07-19',
-  '/contact/': '2026-07-19',
-  '/disclaimer/': '2026-07-19',
-  '/terms/': '2026-07-19',
-  '/privacy/': '2026-07-19',
-  '/cookies/': '2026-07-19',
+  '/patti-chart/': '2026-07-28',
+  '/timings/': '2026-07-28',
+  '/how-to-play/': '2026-07-28',
+  '/faq/': '2026-07-28',
+  '/about/': '2026-07-28',
+  '/contact/': '2026-07-28',
+  '/disclaimer/': '2026-07-28',
+  '/terms/': '2026-07-28',
+  '/privacy/': '2026-07-28',
+  '/cookies/': '2026-07-28',
 };
 
 // /old-results/'s lastmod is the latest declaredAt among all frozen (archived)
