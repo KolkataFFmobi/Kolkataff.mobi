@@ -1006,6 +1006,7 @@ function renderOldResultsHub(ctx) {
       '<nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; <span>Old Results</span></nav>' +
       '<h1>Kolkata Fatafat Old Results</h1>' +
       `<p>${esc(content.OLD_RESULTS_INTRO)}</p>` +
+      content.OLD_RESULTS_LINKS +
       '<p class="muted">No archived results yet.</p>';
     const extra = [{
       '@type': 'BreadcrumbList',
@@ -1065,6 +1066,7 @@ function renderOldResultsHub(ctx) {
     parts.push(`<nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; ${crumbTail}</nav>`);
     parts.push(`<h1 id="month-${mk}">Kolkata Fatafat Old Results${isLatest ? '' : ' &ndash; ' + esc(label)}</h1>`);
     parts.push(`<p>${esc(content.OLD_RESULTS_INTRO)}</p>`);
+    parts.push(content.OLD_RESULTS_LINKS);
     parts.push(dateJumpHtml(ranges, monthUrlMap, minDate, maxDate));
     parts.push(monthLinksHtml(mk));
 
