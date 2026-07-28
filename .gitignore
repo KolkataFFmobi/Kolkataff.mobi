@@ -5,3 +5,11 @@ dist/
 .DS_Store
 *.log
 npm-debug.log*
+
+# Internal working docs — kept on disk, deliberately NOT published to the
+# public repo: CLAUDE.md is the AI/maintainer operating manual, SETUP-
+# AUTOMATION.md documents secret/credential setup, and the content pack is a
+# raw authoring input. None are needed to build or run the site.
+CLAUDE.md
+SETUP-AUTOMATION.md
+kolkataff-mobi-content-pack.md
