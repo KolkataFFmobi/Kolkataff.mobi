@@ -130,10 +130,19 @@ async function main() {
   const dryRun = process.argv.includes('--dry-run');
   const now = new Date();
   const today = core.resolveToday();
-  const yesterday = core.shiftDate(today, -1);
-  const targetDates = [yesterday, today]; // catches overnight gaps + live day
 
-  console.log(`auto-update @ ${core.istIso(now)} IST — targets: ${targetDates.join(', ')}${dryRun ? ' [DRY RUN]' : ''}`);
+  // Look back over a WINDOW, not just yesterday+today, so a multi-day outage
+  // (CI down, laptop off, sources briefly unreachable) self-heals on the next
+  // run instead of leaving a permanent hole in the archive. The sources carry
+  // roughly 10 and 30 dated days respectively, so a 10-day default is fully
+  // covered by both; older gaps need a manual add-result pass. Override with
+  // `--days N` for a one-off deeper catch-up.
+  const daysArgIdx = process.argv.indexOf('--days');
+  const LOOKBACK = daysArgIdx !== -1 ? Math.max(1, Number(process.argv[daysArgIdx + 1]) || 1) : 10;
+  const targetDates = [];
+  for (let i = LOOKBACK; i >= 0; i--) targetDates.push(core.shiftDate(today, -i));
+
+  console.log(`auto-update @ ${core.istIso(now)} IST — window ${targetDates[0]} .. ${today} (${targetDates.length} days)${dryRun ? ' [DRY RUN]' : ''}`);
 
   // 1. Fetch all sources (a failed source degrades coverage, not the run —
   //    but with fewer than MIN_SOURCES up, nothing can confirm, so we stop).
