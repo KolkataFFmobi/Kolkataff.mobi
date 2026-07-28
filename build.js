@@ -393,6 +393,44 @@ function homepageGraph(pm, title, description) {
   };
 }
 
+// Pages whose subject genuinely IS the game entity. These carry the #game node
+// and an `about` reference, so the core entity is reinforced across the content
+// network instead of being asserted on the homepage alone (entity theory: an
+// entity is confirmed by consistent, connected mentions, not one declaration).
+// Legal/utility pages (privacy, cookies, terms, contact, 404) are deliberately
+// NOT about the game — claiming otherwise would be a false entity signal.
+const GAME_TOPICAL_ROUTES = new Set([
+  '/old-results/', '/patti-chart/', '/timings/', '/how-to-play/', '/faq/', '/about/', '/disclaimer/',
+]);
+
+// Shared breadcrumb builder: emits the visible <nav> and the matching
+// BreadcrumbList node from ONE definition, so the markup and the structured
+// data can never drift apart. `trail` is the crumbs AFTER Home, in order:
+// [{ name, href }] — the last entry renders as plain text (current page).
+function breadcrumb(route, trail) {
+  const crumbs = trail.map((c, i) => {
+    const isLast = i === trail.length - 1;
+    return isLast ? `<span>${esc(c.name)}</span>` : `<a href="${escAttr(c.href)}">${esc(c.name)}</a>`;
+  });
+  const html =
+    '<nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> &rsaquo; ' +
+    crumbs.join(' &rsaquo; ') + '</nav>';
+  const node = {
+    '@type': 'BreadcrumbList',
+    '@id': SITE.baseUrl + route + '#breadcrumb',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Kolkata Fatafat result today', item: SITE.baseUrl + '/' },
+      ...trail.map((c, i) => ({
+        '@type': 'ListItem',
+        position: i + 2,
+        name: c.name,
+        item: SITE.baseUrl + (c.href || route),
+      })),
+    ],
+  };
+  return { html, node, ref: { '@id': SITE.baseUrl + route + '#breadcrumb' } };
+}
+
 // WebPage-only graph (legal + simple info pages), with optional extra nodes.
 // webPageProps: optional extra properties spread into the WebPage node (e.g.
 // mainEntity or breadcrumb @id references to nodes passed via extraNodes).
@@ -401,6 +439,7 @@ function homepageGraph(pm, title, description) {
 // homepage, leaving a dangling @id on the other 18 pages.
 function pageGraph(route, title, description, extraNodes, webPageProps) {
   const url = SITE.baseUrl + route;
+  const isGameTopical = GAME_TOPICAL_ROUTES.has(route);
   return {
     '@context': 'https://schema.org',
     '@graph': [
@@ -414,8 +453,13 @@ function pageGraph(route, title, description, extraNodes, webPageProps) {
         description,
         inLanguage: 'en',
         isPartOf: { '@id': SITE.baseUrl + '/#website' },
+        publisher: { '@id': SITE.baseUrl + '/#org' },
+        // Reinforce the core entity on every page that is genuinely about it.
+        ...(isGameTopical ? { about: { '@id': SITE.baseUrl + '/#game' } } : {}),
         ...(webPageProps || {}),
       },
+      // The #game node must exist in the same graph for `about` to resolve.
+      ...(isGameTopical ? [gameNode()] : []),
       ...(extraNodes || []),
     ],
   };
@@ -1096,10 +1140,13 @@ function renderContentPage(slug, ctx) {
   const route = `/${slug}/`;
   const page = content.PAGES[slug];
   if (!page) throw new Error(`content.PAGES missing "${slug}"`);
+  // Breadcrumb on every content page (the homepage is the root — a breadcrumb
+  // there would be a self-referential trail, so it deliberately has none).
+  const crumb = breadcrumb(route, [{ name: page.h1, href: route }]);
   // h1 gets a stable id="page-title"; each content page's outer <section> (in
   // lib/content.js) is aria-labelledby="page-title", naming that region by the
   // page's own title. Appended computed-table sections get their own h2 id.
-  let body = `<h1 id="page-title">${esc(page.h1)}</h1>\n${page.bodyHtml}`;
+  let body = `${crumb.html}\n<h1 id="page-title">${esc(page.h1)}</h1>\n${page.bodyHtml}`;
 
   if (slug === 'patti-chart') {
     // The full 220-Patti table FIRST (it is what the title/description/prose
@@ -1138,7 +1185,7 @@ function renderContentPage(slug, ctx) {
       '</section>';
   }
 
-  const graph = pageGraph(route, page.title, page.description);
+  const graph = pageGraph(route, page.title, page.description, [crumb.node], { breadcrumb: crumb.ref });
   const html = layout({ title: page.title, description: page.description, route, graph, body });
   writeFile(route, html, { mtime: ctx.buildInstant });
 }
