@@ -1229,17 +1229,26 @@ function archivesDesc(ctx) {
 // description, H1, or body copy — sitemap <lastmod> for these pages must
 // NEVER be derived from build time, so a rebuild with no content change
 // produces the exact same lastmod every time (checked post-build).
+// Hand-maintained per-page lastmod. A rebuild must NEVER bump these (assertion
+// 19 depends on it), so they move only when a page's copy genuinely changes —
+// which is easy to forget, and WAS forgotten across a full day of edits until
+// it was caught by eye.
+//
+// `hash` fingerprints that page's own content in lib/content.js. The build
+// recomputes it and FAILS if it no longer matches, printing the value to paste
+// in. Changing copy without touching the date is now a build error, not a
+// silently stale sitemap entry telling Google nothing changed.
 const CONTENT_LASTMOD = {
-  '/patti-chart/': '2026-07-28',
-  '/timings/': '2026-07-28',
-  '/how-to-play/': '2026-07-28',
-  '/faq/': '2026-07-28',
-  '/about/': '2026-07-28',
-  '/contact/': '2026-07-28',
-  '/disclaimer/': '2026-07-28',
-  '/terms/': '2026-07-28',
-  '/privacy/': '2026-07-28',
-  '/cookies/': '2026-07-28',
+  '/patti-chart/': { date: '2026-07-28', hash: '96ae2bd737' },
+  '/timings/': { date: '2026-07-28', hash: 'd281d37d39' },
+  '/how-to-play/': { date: '2026-07-28', hash: '41108a38da' },
+  '/faq/': { date: '2026-07-28', hash: '9fb2bfcc90' },
+  '/about/': { date: '2026-07-28', hash: '655c8437e7' },
+  '/contact/': { date: '2026-07-28', hash: '25c82dde03' },
+  '/disclaimer/': { date: '2026-07-28', hash: 'a4d2566e97' },
+  '/terms/': { date: '2026-07-28', hash: 'ce0173a767' },
+  '/privacy/': { date: '2026-07-28', hash: '5d42eae340' },
+  '/cookies/': { date: '2026-07-28', hash: '69ac690848' },
 };
 
 // /old-results/'s lastmod is the latest declaredAt among all frozen (archived)
@@ -1272,7 +1281,8 @@ function buildSitemap(ctx) {
   // the sitemap is exactly the fixed canonical page set, nothing dynamic —
   // those pages still exist and are still crawlable via the month-links nav
   // on every old-results page, just not sitemap-listed.
-  for (const [route, date] of Object.entries(CONTENT_LASTMOD)) {
+  for (const [route, meta] of Object.entries(CONTENT_LASTMOD)) {
+    const date = meta.date;
     add(SITE.baseUrl + route, `${date}T00:00:00+05:30`);
   }
 
@@ -1919,7 +1929,26 @@ function runAssertions(ctx) {
   // lastmod stability.
   const urlBlocks = [...sitemapXml.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<\/url>/g)];
   const lastmodByLoc = new Map(urlBlocks.map((m) => [m[1], m[2]]));
-  for (const [route, date] of Object.entries(CONTENT_LASTMOD)) {
+  // (S) CONTENT FRESHNESS — a page's copy must not change without its
+  // lastmod moving, or the sitemap tells Google "unchanged" about a page we
+  // just rewrote (which is exactly what happened on 2026-07-28).
+  const H = (x) => crypto.createHash('sha256').update(JSON.stringify(x)).digest('hex').slice(0, 10);
+  const stale = [];
+  for (const [route, meta] of Object.entries(CONTENT_LASTMOD)) {
+    const slug = route.replace(/^\/|\/$/g, '');
+    const pg = content.PAGES[slug];
+    const actual = route === '/faq/'
+      ? H([content.FAQ_CORE, content.FAQ_MORE])
+      : H([pg.title, pg.description, pg.h1, pg.bodyHtml, pg.faq || null]);
+    if (actual !== meta.hash) stale.push(`${route}  recorded ${meta.hash} -> actual ${actual}`);
+  }
+  assert(stale.length === 0,
+    'content changed without updating CONTENT_LASTMOD in build.js:\n    ' + stale.join('\n    ') +
+    '\n  Fix: set that route\'s `date` to today AND paste the new `hash`.');
+  results.push(`[content-freshness] all ${Object.keys(CONTENT_LASTMOD).length} content pages match their recorded fingerprint`);
+
+  for (const [route, meta] of Object.entries(CONTENT_LASTMOD)) {
+    const date = meta.date;
     const lm = lastmodByLoc.get(SITE.baseUrl + route);
     assert(lm === `${date}T00:00:00+05:30`, `${route}: lastmod is not the fixed CONTENT_LASTMOD stamp (got "${lm}")`);
   }
