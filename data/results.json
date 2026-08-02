@@ -9315,7 +9315,7 @@
     },
     {
       "date": "2026-08-02",
-      "frozen": false,
+      "frozen": true,
       "bazis": [
         {
           "n": 1,
