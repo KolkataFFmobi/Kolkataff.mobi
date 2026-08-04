@@ -9449,7 +9449,7 @@
     },
     {
       "date": "2026-08-04",
-      "frozen": false,
+      "frozen": true,
       "bazis": [
         {
           "n": 1,
@@ -9493,6 +9493,36 @@
           "single": "0",
           "declaredAt": "2026-08-04T17:20:15+05:30",
           "sources": [
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 6,
+          "patti": "589",
+          "single": "2",
+          "declaredAt": "2026-08-05T04:06:33+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 7,
+          "patti": "246",
+          "single": "2",
+          "declaredAt": "2026-08-05T04:06:33+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 8,
+          "patti": "367",
+          "single": "6",
+          "declaredAt": "2026-08-05T04:06:33+05:30",
+          "sources": [
+            "kolkataff.tv",
             "kolkataff.in"
           ]
         }
