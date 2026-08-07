@@ -9689,6 +9689,92 @@
           ]
         }
       ]
+    },
+    {
+      "date": "2026-08-07",
+      "frozen": true,
+      "bazis": [
+        {
+          "n": 1,
+          "patti": "137",
+          "single": "1",
+          "declaredAt": "2026-08-08T01:54:26+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 2,
+          "patti": "578",
+          "single": "0",
+          "declaredAt": "2026-08-08T01:54:26+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 3,
+          "patti": "356",
+          "single": "4",
+          "declaredAt": "2026-08-08T01:54:26+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 4,
+          "patti": "678",
+          "single": "1",
+          "declaredAt": "2026-08-08T01:54:26+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 5,
+          "patti": "267",
+          "single": "5",
+          "declaredAt": "2026-08-08T01:54:26+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 6,
+          "patti": "569",
+          "single": "0",
+          "declaredAt": "2026-08-08T01:54:26+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 7,
+          "patti": "135",
+          "single": "9",
+          "declaredAt": "2026-08-08T01:54:26+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 8,
+          "patti": "279",
+          "single": "8",
+          "declaredAt": "2026-08-08T01:54:26+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        }
+      ]
     }
   ]
 }
