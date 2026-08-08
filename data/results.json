@@ -9775,6 +9775,22 @@
           ]
         }
       ]
+    },
+    {
+      "date": "2026-08-08",
+      "frozen": false,
+      "bazis": [
+        {
+          "n": 1,
+          "patti": "236",
+          "single": "1",
+          "declaredAt": "2026-08-08T11:37:10+05:30",
+          "sources": [
+            "kolkataresultff.com",
+            "kolkataff.in"
+          ]
+        }
+      ]
     }
   ]
 }
