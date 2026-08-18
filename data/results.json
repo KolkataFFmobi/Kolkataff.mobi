@@ -10472,6 +10472,33 @@
       "frozen": false,
       "bazis": [
         {
+          "n": 1,
+          "patti": "369",
+          "single": "8",
+          "declaredAt": "2026-08-18T17:29:05+05:30",
+          "sources": [
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 2,
+          "patti": "134",
+          "single": "8",
+          "declaredAt": "2026-08-18T17:29:05+05:30",
+          "sources": [
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 3,
+          "patti": "370",
+          "single": "0",
+          "declaredAt": "2026-08-18T17:29:05+05:30",
+          "sources": [
+            "kolkataff.in"
+          ]
+        },
+        {
           "n": 4,
           "patti": "358",
           "single": "6",
