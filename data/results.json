@@ -10552,6 +10552,21 @@
           ]
         }
       ]
+    },
+    {
+      "date": "2026-08-19",
+      "frozen": false,
+      "bazis": [
+        {
+          "n": 1,
+          "patti": "589",
+          "single": "2",
+          "declaredAt": "2026-08-19T10:46:58+05:30",
+          "sources": [
+            "kolkataff.in"
+          ]
+        }
+      ]
     }
   ]
 }
