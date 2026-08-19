@@ -10567,6 +10567,24 @@
           ]
         },
         {
+          "n": 2,
+          "patti": "489",
+          "single": "1",
+          "declaredAt": "2026-08-19T22:30:03+05:30",
+          "sources": [
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 3,
+          "patti": "127",
+          "single": "0",
+          "declaredAt": "2026-08-19T22:30:03+05:30",
+          "sources": [
+            "kolkataff.in"
+          ]
+        },
+        {
           "n": 4,
           "patti": "499",
           "single": "2",
@@ -10576,12 +10594,39 @@
           ]
         },
         {
+          "n": 5,
+          "patti": "257",
+          "single": "4",
+          "declaredAt": "2026-08-19T22:30:03+05:30",
+          "sources": [
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 6,
+          "patti": "355",
+          "single": "3",
+          "declaredAt": "2026-08-19T22:30:03+05:30",
+          "sources": [
+            "kolkataff.in"
+          ]
+        },
+        {
           "n": 7,
           "patti": "138",
           "single": "2",
           "declaredAt": "2026-08-19T19:38:28+05:30",
           "sources": [
             "kolkataresultff.com"
+          ]
+        },
+        {
+          "n": 8,
+          "patti": "189",
+          "single": "8",
+          "declaredAt": "2026-08-19T22:30:03+05:30",
+          "sources": [
+            "kolkataff.in"
           ]
         }
       ]
