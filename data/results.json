@@ -11024,7 +11024,7 @@
     },
     {
       "date": "2026-08-25",
-      "frozen": false,
+      "frozen": true,
       "bazis": [
         {
           "n": 1,
@@ -11092,6 +11092,17 @@
           "single": "8",
           "declaredAt": "2026-08-25T21:49:41+05:30",
           "sources": [
+            "kolkataresultff.com",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 8,
+          "patti": "999",
+          "single": "7",
+          "declaredAt": "2026-08-26T01:26:01+05:30",
+          "sources": [
+            "kolkataff.tv",
             "kolkataresultff.com",
             "kolkataff.in"
           ]
