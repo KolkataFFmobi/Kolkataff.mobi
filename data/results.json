@@ -11123,6 +11123,15 @@
           ]
         },
         {
+          "n": 2,
+          "patti": "480",
+          "single": "2",
+          "declaredAt": "2026-08-26T17:20:48+05:30",
+          "sources": [
+            "kolkataff.in"
+          ]
+        },
+        {
           "n": 3,
           "patti": "380",
           "single": "1",
@@ -11139,6 +11148,15 @@
           "declaredAt": "2026-08-26T15:38:41+05:30",
           "sources": [
             "kolkataresultff.com",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 5,
+          "patti": "670",
+          "single": "3",
+          "declaredAt": "2026-08-26T17:20:48+05:30",
+          "sources": [
             "kolkataff.in"
           ]
         }
