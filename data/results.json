@@ -11575,6 +11575,39 @@
           ]
         }
       ]
+    },
+    {
+      "date": "2026-09-01",
+      "frozen": false,
+      "bazis": [
+        {
+          "n": 1,
+          "patti": "345",
+          "single": "2",
+          "declaredAt": "2026-09-01T14:46:47+05:30",
+          "sources": [
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 2,
+          "patti": "256",
+          "single": "3",
+          "declaredAt": "2026-09-01T14:46:47+05:30",
+          "sources": [
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 3,
+          "patti": "680",
+          "single": "4",
+          "declaredAt": "2026-09-01T14:46:47+05:30",
+          "sources": [
+            "kolkataff.in"
+          ]
+        }
+      ]
     }
   ]
 }
