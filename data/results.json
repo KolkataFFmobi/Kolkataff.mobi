@@ -11661,8 +11661,28 @@
     },
     {
       "date": "2026-09-02",
-      "frozen": false,
+      "frozen": true,
       "bazis": [
+        {
+          "n": 1,
+          "patti": "170",
+          "single": "8",
+          "declaredAt": "2026-09-03T02:43:12+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 2,
+          "patti": "679",
+          "single": "2",
+          "declaredAt": "2026-09-03T02:43:12+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
         {
           "n": 3,
           "patti": "249",
