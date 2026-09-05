@@ -11944,6 +11944,26 @@
           "sources": [
             "kolkataff.in"
           ]
+        },
+        {
+          "n": 4,
+          "patti": "336",
+          "single": "2",
+          "declaredAt": "2026-09-05T17:21:17+05:30",
+          "sources": [
+            "kolkataresultff.com",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 5,
+          "patti": "256",
+          "single": "3",
+          "declaredAt": "2026-09-05T17:21:17+05:30",
+          "sources": [
+            "kolkataresultff.com",
+            "kolkataff.in"
+          ]
         }
       ]
     }
