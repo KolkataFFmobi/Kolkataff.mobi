@@ -12802,15 +12802,57 @@
     },
     {
       "date": "2026-09-24",
-      "frozen": false,
+      "frozen": true,
       "bazis": [
         {
+          "n": 1,
+          "patti": "689",
+          "single": "3",
+          "declaredAt": "2026-09-25T03:14:09+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 2,
+          "patti": "344",
+          "single": "1",
+          "declaredAt": "2026-09-25T03:14:09+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 3,
+          "patti": "190",
+          "single": "0",
+          "declaredAt": "2026-09-25T03:14:09+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
           "n": 4,
-          "patti": "680",
-          "single": "4",
+          "patti": "245",
+          "single": "1",
           "declaredAt": "2026-09-24T14:38:57+05:30",
           "sources": [
-            "kolkataresultff.com"
+            "kolkataff.tv",
+            "kolkataff.in"
+          ],
+          "correctedAt": "2026-09-25T03:14:09+05:30"
+        },
+        {
+          "n": 5,
+          "patti": "237",
+          "single": "2",
+          "declaredAt": "2026-09-25T03:14:09+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
           ]
         },
         {
@@ -12824,11 +12866,23 @@
         },
         {
           "n": 7,
-          "patti": "146",
-          "single": "1",
+          "patti": "179",
+          "single": "7",
           "declaredAt": "2026-09-24T19:42:34+05:30",
           "sources": [
-            "kolkataresultff.com"
+            "kolkataff.tv",
+            "kolkataff.in"
+          ],
+          "correctedAt": "2026-09-25T03:14:09+05:30"
+        },
+        {
+          "n": 8,
+          "patti": "377",
+          "single": "7",
+          "declaredAt": "2026-09-25T03:14:09+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
           ]
         }
       ]
