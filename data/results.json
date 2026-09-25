@@ -12889,15 +12889,87 @@
     },
     {
       "date": "2026-09-25",
-      "frozen": false,
+      "frozen": true,
       "bazis": [
         {
+          "n": 1,
+          "patti": "159",
+          "single": "5",
+          "declaredAt": "2026-09-26T00:26:37+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 2,
+          "patti": "130",
+          "single": "4",
+          "declaredAt": "2026-09-26T00:26:37+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 3,
+          "patti": "558",
+          "single": "8",
+          "declaredAt": "2026-09-26T00:26:37+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
           "n": 4,
-          "patti": "245",
-          "single": "1",
+          "patti": "456",
+          "single": "5",
           "declaredAt": "2026-09-25T14:58:47+05:30",
           "sources": [
-            "kolkataresultff.com"
+            "kolkataff.tv",
+            "kolkataff.in"
+          ],
+          "correctedAt": "2026-09-26T00:26:37+05:30"
+        },
+        {
+          "n": 5,
+          "patti": "330",
+          "single": "6",
+          "declaredAt": "2026-09-26T00:26:37+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 6,
+          "patti": "260",
+          "single": "8",
+          "declaredAt": "2026-09-26T00:26:37+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 7,
+          "patti": "245",
+          "single": "1",
+          "declaredAt": "2026-09-26T00:26:37+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 8,
+          "patti": "156",
+          "single": "2",
+          "declaredAt": "2026-09-26T00:26:37+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
           ]
         }
       ]
