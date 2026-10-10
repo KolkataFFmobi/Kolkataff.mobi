@@ -14111,7 +14111,7 @@
     },
     {
       "date": "2026-10-10",
-      "frozen": false,
+      "frozen": true,
       "bazis": [
         {
           "n": 1,
