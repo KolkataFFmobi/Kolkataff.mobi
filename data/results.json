@@ -14505,7 +14505,7 @@
     },
     {
       "date": "2026-10-15",
-      "frozen": false,
+      "frozen": true,
       "bazis": [
         {
           "n": 1,
