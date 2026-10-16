@@ -14622,6 +14622,36 @@
             "kolkataresultff.com",
             "kolkataff.in"
           ]
+        },
+        {
+          "n": 4,
+          "patti": "245",
+          "single": "1",
+          "declaredAt": "2026-10-16T19:11:59+05:30",
+          "sources": [
+            "kolkataresultff.com",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 5,
+          "patti": "235",
+          "single": "0",
+          "declaredAt": "2026-10-16T19:11:59+05:30",
+          "sources": [
+            "kolkataresultff.com",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 6,
+          "patti": "156",
+          "single": "2",
+          "declaredAt": "2026-10-16T19:11:59+05:30",
+          "sources": [
+            "kolkataresultff.com",
+            "kolkataff.in"
+          ]
         }
       ]
     }
