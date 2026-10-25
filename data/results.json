@@ -15192,6 +15192,32 @@
           ]
         }
       ]
+    },
+    {
+      "date": "2026-10-25",
+      "frozen": false,
+      "bazis": [
+        {
+          "n": 1,
+          "patti": "278",
+          "single": "7",
+          "declaredAt": "2026-10-25T14:31:19+05:30",
+          "sources": [
+            "kolkataresultff.com",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 2,
+          "patti": "446",
+          "single": "4",
+          "declaredAt": "2026-10-25T14:31:19+05:30",
+          "sources": [
+            "kolkataresultff.com",
+            "kolkataff.in"
+          ]
+        }
+      ]
     }
   ]
 }
