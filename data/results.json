@@ -15413,6 +15413,92 @@
           "correctedAt": "2026-10-28T01:43:03+05:30"
         }
       ]
+    },
+    {
+      "date": "2026-10-28",
+      "frozen": true,
+      "bazis": [
+        {
+          "n": 1,
+          "patti": "120",
+          "single": "3",
+          "declaredAt": "2026-10-29T04:16:39+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 2,
+          "patti": "890",
+          "single": "7",
+          "declaredAt": "2026-10-29T04:16:39+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 3,
+          "patti": "169",
+          "single": "6",
+          "declaredAt": "2026-10-29T04:16:39+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 4,
+          "patti": "580",
+          "single": "3",
+          "declaredAt": "2026-10-29T04:16:39+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 5,
+          "patti": "220",
+          "single": "4",
+          "declaredAt": "2026-10-29T04:16:39+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 6,
+          "patti": "149",
+          "single": "4",
+          "declaredAt": "2026-10-29T04:16:39+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 7,
+          "patti": "259",
+          "single": "6",
+          "declaredAt": "2026-10-29T04:16:39+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 8,
+          "patti": "366",
+          "single": "5",
+          "declaredAt": "2026-10-29T04:16:39+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        }
+      ]
     }
   ]
 }
