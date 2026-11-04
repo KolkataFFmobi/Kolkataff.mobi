@@ -15981,6 +15981,92 @@
           ]
         }
       ]
+    },
+    {
+      "date": "2026-11-04",
+      "frozen": true,
+      "bazis": [
+        {
+          "n": 1,
+          "patti": "457",
+          "single": "6",
+          "declaredAt": "2026-11-05T01:07:22+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 2,
+          "patti": "156",
+          "single": "2",
+          "declaredAt": "2026-11-05T01:07:22+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 3,
+          "patti": "800",
+          "single": "8",
+          "declaredAt": "2026-11-05T01:07:22+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 4,
+          "patti": "360",
+          "single": "9",
+          "declaredAt": "2026-11-05T01:07:22+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 5,
+          "patti": "368",
+          "single": "7",
+          "declaredAt": "2026-11-05T01:07:22+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 6,
+          "patti": "179",
+          "single": "7",
+          "declaredAt": "2026-11-05T01:07:22+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 7,
+          "patti": "459",
+          "single": "8",
+          "declaredAt": "2026-11-05T01:07:22+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        },
+        {
+          "n": 8,
+          "patti": "277",
+          "single": "6",
+          "declaredAt": "2026-11-05T01:07:22+05:30",
+          "sources": [
+            "kolkataff.tv",
+            "kolkataff.in"
+          ]
+        }
+      ]
     }
   ]
 }
