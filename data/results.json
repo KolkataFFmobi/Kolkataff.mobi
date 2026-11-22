@@ -17074,7 +17074,7 @@
     },
     {
       "date": "2026-11-22",
-      "frozen": false,
+      "frozen": true,
       "bazis": [
         {
           "n": 1,
